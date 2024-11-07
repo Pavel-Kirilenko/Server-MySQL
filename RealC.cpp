@@ -11,9 +11,9 @@
 
 using namespace std;
 
-/***** Функции и классы серверного соединения *****/
+/***** Г”ГіГ­ГЄГ¶ГЁГЁ ГЁ ГЄГ«Г Г±Г±Г» Г±ГҐГ°ГўГҐГ°Г­Г®ГЈГ® Г±Г®ГҐГ¤ГЁГ­ГҐГ­ГЁГї *****/
 
-void userReg(string& curName, string& curSername, string& curEmail, int hash) // Ввод данных пользователя во время регистрации
+void userReg(string& curName, string& curSername, string& curEmail, int hash) // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
 {
     cout << "Type you name (less than 15 symbols including spaces): ";
     getline(cin, curName);
@@ -21,29 +21,29 @@ void userReg(string& curName, string& curSername, string& curEmail, int hash) //
     getline(cin, curSername);
     cout << "Type you email (less than 15 symbols including spaces): ";
     getline(cin, curEmail);
-    cout << "Type your password (less than 15 symbols including spaces): ";
+    cout << "Type your password (numbers only!): ";
     string password;
     getline(cin, password);
-    hash = (stoi(password) % 50) + (stoi(password) % 49); // Вычислить хэш от пароля
+    hash = (stoi(password) % 50) + (stoi(password) % 49); // Г‚Г»Г·ГЁГ±Г«ГЁГІГј ГµГЅГё Г®ГІ ГЇГ Г°Г®Г«Гї
 }
 
-void userEnt(string& curName, int hash) // Ввод данных пользователя во время входа в чат
+void userEnt(string& curName, int hash) // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї ГўГµГ®Г¤Г  Гў Г·Г ГІ
 {
     cout << "Type you name (less than 15 symbols including spaces): ";
     getline(cin, curName);
     cout << "Type your password (less than 15 symbols including spaces): ";
     string password;
     getline(cin, password);
-    hash = (stoi(password) % 50) + (stoi(password) % 49); // Вычислить хэш от пароля
+    hash = (stoi(password) % 50) + (stoi(password) % 49); // Г‚Г»Г·ГЁГ±Г«ГЁГІГј ГµГЅГё Г®ГІ ГЇГ Г°Г®Г«Гї
 }
 
-void Chat::entrChat(bool& persPresence, string& curName, int hash) // Зарегистрироваться в чате
+void Chat::entrChat(bool& persPresence, string& curName, int hash) // Г‡Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°Г®ГўГ ГІГјГ±Гї Гў Г·Г ГІГҐ
 {
-    if (persArray.size()) // Если массив не пустой
+    if (persArray.size()) // Г…Г±Г«ГЁ Г¬Г Г±Г±ГЁГў Г­ГҐ ГЇГіГ±ГІГ®Г©
     {
-        userEnt(curName, hash); // Ввести данные пользователя во время регистрации
+        userEnt(curName, hash); // Г‚ГўГҐГ±ГІГЁ Г¤Г Г­Г­Г»ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
         map <string, int>::iterator it = persArray.find(curName);
-        if (it != persArray.end() && it->second == hash) persPresence = true; // Успешная регистрация
+        if (it != persArray.end() && it->second == hash) persPresence = true; // Г“Г±ГЇГҐГёГ­Г Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї
         if (persPresence == false)
         {
             cout << "The user whith this name and password not found. Check the input" << endl;
@@ -54,33 +54,33 @@ void Chat::entrChat(bool& persPresence, string& curName, int hash) // Зарегистри
         cout << "There are no users in the chat yet" << endl;
     }
 }
-void Chat::regChat(bool& nameInChatAlready, bool& persPresence, string& curName, string& curSername, string& curEmail, int hash) // Зарегистрироваться в чате
+void Chat::regChat(bool& nameInChatAlready, bool& persPresence, string& curName, string& curSername, string& curEmail, int hash) // Г‡Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°Г®ГўГ ГІГјГ±Гї Гў Г·Г ГІГҐ
 {
     int socket_file_descriptor;
-    userReg(curName, curSername, curEmail, hash); // Ввод данных пользователя во время регистрации
+    userReg(curName, curSername, curEmail, hash); // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
     map <string, int>::iterator it = persArray.find(curName);
     if (it != persArray.end() || curName.empty()) {
-        nameInChatAlready = true; // Если имя уже есть в чате или имя пустое
+        nameInChatAlready = true; // Г…Г±Г«ГЁ ГЁГ¬Гї ГіГ¦ГҐ ГҐГ±ГІГј Гў Г·Г ГІГҐ ГЁГ«ГЁ ГЁГ¬Гї ГЇГіГ±ГІГ®ГҐ
     }
-    if (nameInChatAlready) { // Регистрация отклонена
+    if (nameInChatAlready) { // ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї Г®ГІГЄГ«Г®Г­ГҐГ­Г 
         cout << "The user with this name is already in the chat or the data is not correct (empty name or password). Repeat the input" << endl;
         nameInChatAlready = false;
     }
     else {
-        persArray.insert({ curName, hash }); // Вставка данных пользователя в массив
+        persArray.insert({ curName, hash }); // Г‚Г±ГІГ ГўГЄГ  Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї Гў Г¬Г Г±Г±ГЁГў
         cout << "Welcome to the chat, " << curName << "!" << endl;
 
-        // Отправляем данные о регистрации на сервер
-        string message = "register " + curName + "," + curSername + "," + curEmail; // Формат: "register имя,фамилия,email"
+        // ГЋГІГЇГ°Г ГўГ«ГїГҐГ¬ Г¤Г Г­Г­Г»ГҐ Г® Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ Г­Г  Г±ГҐГ°ГўГҐГ°
+        string message = "register " + curName + "," + curSername + "," + curEmail; // Г”Г®Г°Г¬Г ГІ: "register ГЁГ¬Гї,ГґГ Г¬ГЁГ«ГЁГї,email"
         ssize_t bytes = write(socket_file_descriptor, message.c_str(), message.size());
         if (bytes >= 0) {
             cout << "User  registration data sent to server." << endl;
         }
-        persPresence = true; // Успешная регистрация
+        persPresence = true; // Г“Г±ГЇГҐГёГ­Г Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї
     }
 }
 
-void Chat::sendMess(string curName) // Отправить сообщение
+void Chat::sendMess(string curName) // ГЋГІГЇГ°Г ГўГЁГІГј Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ
 {
     cout << "to quit the dialog type 'end'" << endl;
     int socket_file_descriptor, connection;
@@ -88,7 +88,7 @@ void Chat::sendMess(string curName) // Отправить сообщение
     char message[MESSAGE_LENGTH];
     string suffix = "_(" + curName + " is writing to you)";
     const char* suf = suffix.c_str();
-    // создаем сокет
+    // Г±Г®Г§Г¤Г ГҐГ¬ Г±Г®ГЄГҐГІ
 
     socket_file_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_file_descriptor == -1) {
@@ -96,19 +96,19 @@ void Chat::sendMess(string curName) // Отправить сообщение
         return;
     }
 
-    // определяем адрес сервера
+    // Г®ГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г Г¤Г°ГҐГ± Г±ГҐГ°ГўГҐГ°Г 
     serveraddress.sin_addr.s_addr = inet_addr("127.0.0.1");
-    // определяем номер порта
+    // Г®ГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г­Г®Г¬ГҐГ° ГЇГ®Г°ГІГ 
     serveraddress.sin_port = htons(PORT);
-    // используем IPv4
+    // ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГ¬ IPv4
     serveraddress.sin_family = AF_INET;
-    // подключаемся к серверу
+    // ГЇГ®Г¤ГЄГ«ГѕГ·Г ГҐГ¬Г±Гї ГЄ Г±ГҐГ°ГўГҐГ°Гі
     connection = connect(socket_file_descriptor, (struct sockaddr*)&serveraddress, sizeof(serveraddress));
     if (connection == -1) {
         cout << "Connection with the server failed.!" << endl;
         return;
     }
-    // взаимодействие с сервером
+    // ГўГ§Г ГЁГ¬Г®Г¤ГҐГ©Г±ГІГўГЁГҐ Г± Г±ГҐГ°ГўГҐГ°Г®Г¬
     while (1) {
         bzero(message, sizeof(message));
         cout << "Enter the message: " << endl;
@@ -120,16 +120,16 @@ void Chat::sendMess(string curName) // Отправить сообщение
         }
         strcat(message, suf);
         ssize_t bytes = write(socket_file_descriptor, message, strlen(message));
-        // если >= 0  байты переданы, значит передача успешна
+        // ГҐГ±Г«ГЁ >= 0  ГЎГ Г©ГІГ» ГЇГҐГ°ГҐГ¤Г Г­Г», Г§Г­Г Г·ГЁГІ ГЇГҐГ°ГҐГ¤Г Г·Г  ГіГ±ГЇГҐГёГ­Г 
         if (bytes >= 0) {
             cout << "     ***     " << endl;
         }
         bzero(message, sizeof(message));
-        // ожидание ответа от сервера
+        // Г®Г¦ГЁГ¤Г Г­ГЁГҐ Г®ГІГўГҐГІГ  Г®ГІ Г±ГҐГ°ГўГҐГ°Г 
         read(socket_file_descriptor, message, sizeof(message));
         cout << "Message: " << message << endl;
     }
-    // закрываем сокет, останавливаем соединение
+    // Г§Г ГЄГ°Г»ГўГ ГҐГ¬ Г±Г®ГЄГҐГІ, Г®Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ Г±Г®ГҐГ¤ГЁГ­ГҐГ­ГЁГҐ
     close(socket_file_descriptor);
     return;
 }
