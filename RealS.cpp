@@ -11,9 +11,9 @@
 
 using namespace std;
 
-/***** Функции взаимодействия с базой данных *****/
+/***** Г”ГіГ­ГЄГ¶ГЁГЁ ГўГ§Г ГЁГ¬Г®Г¤ГҐГ©Г±ГІГўГЁГї Г± ГЎГ Г§Г®Г© Г¤Г Г­Г­Г»Гµ *****/
 
-string* SQL_Connect_Data(string dArray[]) // Ввести данные для подключения к MySQL
+string* SQL_Connect_Data(string dArray[]) // Г‚ГўГҐГ±ГІГЁ Г¤Г Г­Г­Г»ГҐ Г¤Г«Гї ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГї ГЄ MySQL
 {
     string sHostName, sUserName, sMySQLPass, sDataBaseName;
     cout << "Input the host (for example 'localhost'):" << endl;
@@ -31,7 +31,7 @@ string* SQL_Connect_Data(string dArray[]) // Ввести данные для подключения к MyS
     return dArray;
 }
 
-void createQuery(string* sqlConDate, const char* query) // Создать запрос для базы данных.
+void createQuery(string* sqlConDate, const char* query) // Г‘Г®Г§Г¤Г ГІГј Г§Г ГЇГ°Г®Г± Г¤Г«Гї ГЎГ Г§Г» Г¤Г Г­Г­Г»Гµ.
 {
     const char* hostName = sqlConDate[0].c_str();
     const char* userName = sqlConDate[1].c_str();
@@ -55,7 +55,7 @@ void createQuery(string* sqlConDate, const char* query) // Создать запрос для ба
     mysql_close(&mysql);
 }
 
-char* createQueryOut(string* sqlConDate, const char* query) // Создать запрос для базы данных с выводом значения типа char*
+char* createQueryOut(string* sqlConDate, const char* query) // Г‘Г®Г§Г¤Г ГІГј Г§Г ГЇГ°Г®Г± Г¤Г«Гї ГЎГ Г§Г» Г¤Г Г­Г­Г»Гµ Г± ГўГ»ГўГ®Г¤Г®Г¬ Г§Г­Г Г·ГҐГ­ГЁГї ГІГЁГЇГ  char*
 {
     const char* hostName = sqlConDate[0].c_str();
     const char* userName = sqlConDate[1].c_str();
@@ -82,21 +82,21 @@ char* createQueryOut(string* sqlConDate, const char* query) // Создать запрос дл
     if (res) {
         MYSQL_ROW row = mysql_fetch_row(res);
         if (row) {
-            result = strdup(row[0]); // Используем strdup для копирования строки
+            result = strdup(row[0]); // Г€Г±ГЇГ®Г«ГјГ§ГіГҐГ¬ strdup Г¤Г«Гї ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї Г±ГІГ°Г®ГЄГЁ
         }
         mysql_free_result(res);
     }
     else {
-        cout << "Ошибка MySql номер " << mysql_error(&mysql) << endl;
+        cout << "ГЋГёГЁГЎГЄГ  MySql Г­Г®Г¬ГҐГ° " << mysql_error(&mysql) << endl;
     }
 
     mysql_close(&mysql);
     return result;
 }
 
-/***** Функции и классы серверного соединения *****/
+/***** Г”ГіГ­ГЄГ¶ГЁГЁ ГЁ ГЄГ«Г Г±Г±Г» Г±ГҐГ°ГўГҐГ°Г­Г®ГЈГ® Г±Г®ГҐГ¤ГЁГ­ГҐГ­ГЁГї *****/
 
-void userReg(string& curName, string& curSername, string& curEmail, int& hash, std::string* sqlConDate) // Ввод данных пользователя во время регистрации
+void userReg(string& curName, string& curSername, string& curEmail, int& hash, std::string* sqlConDate) // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
 {
     cout << "Type your name (less than 15 symbols including spaces): ";
     getline(cin, curName);
@@ -104,34 +104,34 @@ void userReg(string& curName, string& curSername, string& curEmail, int& hash, s
     getline(cin, curSername);
     cout << "Type your email (less than 100 symbols including spaces): ";
     getline(cin, curEmail);
-    cout << "Type your password (less than 15 symbols including spaces): ";
+    cout << "Type your password (numbers only!): ";
     string password;
     getline(cin, password);
-    hash = (stoi(password) % 50) + (stoi(password) % 49); // Вычислить хэш от пароля
+    hash = (stoi(password) % 50) + (stoi(password) % 49); // Г‚Г»Г·ГЁГ±Г«ГЁГІГј ГµГЅГё Г®ГІ ГЇГ Г°Г®Г«Гї
 
-    // Вставка данных в таблицу Customers
+    // Г‚Г±ГІГ ГўГЄГ  Г¤Г Г­Г­Г»Гµ Гў ГІГ ГЎГ«ГЁГ¶Гі Customers
     string query = "INSERT INTO Customers (name, sername, email, hash) VALUES ('" + curName + "', '" + curSername + "', '" + curEmail + "', '" + to_string(hash) + "');";
     createQuery(sqlConDate, query.c_str());
 }
 
-void userEnt(string& curName, int& hash) // Ввод данных пользователя во время входа в чат
+void userEnt(string& curName, int& hash) // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї ГўГµГ®Г¤Г  Гў Г·Г ГІ
 {
     cout << "Type your name (less than 15 symbols including spaces): ";
     getline(cin, curName);
     cout << "Type your password (less than 15 symbols including spaces): ";
     string password;
     getline(cin, password);
-    hash = (stoi(password) % 50) + (stoi(password) % 49); // Вычислить хэш от пароля
+    hash = (stoi(password) % 50) + (stoi(password) % 49); // Г‚Г»Г·ГЁГ±Г«ГЁГІГј ГµГЅГё Г®ГІ ГЇГ Г°Г®Г«Гї
 }
 
-void Chat::entrChat(bool& persPresence, string& curName, int& hash) // Войти в чат
+void Chat::entrChat(bool& persPresence, string& curName, int& hash) // Г‚Г®Г©ГІГЁ Гў Г·Г ГІ
 {
-    if (persArray.size()) // Если массив не пустой
+    if (persArray.size()) // Г…Г±Г«ГЁ Г¬Г Г±Г±ГЁГў Г­ГҐ ГЇГіГ±ГІГ®Г©
     {
-        userEnt(curName, hash); // Ввести данные пользователя во время регистрации
+        userEnt(curName, hash); // Г‚ГўГҐГ±ГІГЁ Г¤Г Г­Г­Г»ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
         map<string, int>::iterator it = persArray.find(curName);
         if (it != persArray.end() && it->second == hash) {
-            persPresence = true; // Успешная регистрация
+            persPresence = true; // Г“Г±ГЇГҐГёГ­Г Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї
         }
         if (!persPresence) {
             cout << "The user with this name and password not found. Check the input" << endl;
@@ -142,25 +142,25 @@ void Chat::entrChat(bool& persPresence, string& curName, int& hash) // Войти в ч
     }
 }
 
-void Chat::regChat(bool& nameInChatAlready, bool& persPresence, string& curName, string& curSername, string& curEmail, int& hash, std::string* sqlConDate) // Зарегистрироваться в чате
+void Chat::regChat(bool& nameInChatAlready, bool& persPresence, string& curName, string& curSername, string& curEmail, int& hash, std::string* sqlConDate) // Г‡Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°Г®ГўГ ГІГјГ±Гї Гў Г·Г ГІГҐ
 {
-    userReg(curName, curSername, curEmail, hash, sqlConDate); // Ввод данных пользователя во время регистрации
+    userReg(curName, curSername, curEmail, hash, sqlConDate); // Г‚ГўГ®Г¤ Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГўГ® ГўГ°ГҐГ¬Гї Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
     map<string, int>::iterator it = persArray.find(curName);
     if (it != persArray.end() || curName.empty()) {
-        nameInChatAlready = true; // Если имя уже есть в чате или имя пустое
+        nameInChatAlready = true; // Г…Г±Г«ГЁ ГЁГ¬Гї ГіГ¦ГҐ ГҐГ±ГІГј Гў Г·Г ГІГҐ ГЁГ«ГЁ ГЁГ¬Гї ГЇГіГ±ГІГ®ГҐ
     }
-    if (nameInChatAlready) { // Регистрация отклонена
+    if (nameInChatAlready) { // ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї Г®ГІГЄГ«Г®Г­ГҐГ­Г 
         cout << "The user with this name is already in the chat or the data is not correct (empty name or password). Repeat the input" << endl;
         nameInChatAlready = false;
     }
     else {
-        persArray.insert({ curName, hash }); // Вставка данных пользователя в массив
+        persArray.insert({ curName, hash }); // Г‚Г±ГІГ ГўГЄГ  Г¤Г Г­Г­Г»Гµ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї Гў Г¬Г Г±Г±ГЁГў
         cout << "Welcome to the chat, " << curName << "!" << endl;
         persPresence = true;
     }
 }
 
-void Chat::sendMess(string curName, std::string* sqlConDate) // Отправить сообщение
+void Chat::sendMess(string curName, std::string* sqlConDate) // ГЋГІГЇГ°Г ГўГЁГІГј Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ
 {
     struct sockaddr_in serveraddress, client;
     socklen_t length;
@@ -169,7 +169,7 @@ void Chat::sendMess(string curName, std::string* sqlConDate) // Отправить сообще
     string suffix = "_(" + curName + " is writing to you)";
     const char* suf = suffix.c_str();
 
-    // Создаем сокет
+    // Г‘Г®Г§Г¤Г ГҐГ¬ Г±Г®ГЄГҐГІ
     sockert_file_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (sockert_file_descriptor == -1) {
         cout << "Socket creation failed.!" << endl;
@@ -180,14 +180,14 @@ void Chat::sendMess(string curName, std::string* sqlConDate) // Отправить сообще
     serveraddress.sin_port = htons(PORT);
     serveraddress.sin_family = AF_INET;
 
-    // Привязываем сокет
+    // ГЏГ°ГЁГўГїГ§Г»ГўГ ГҐГ¬ Г±Г®ГЄГҐГІ
     bind_status = bind(sockert_file_descriptor, (struct sockaddr*)&serveraddress, sizeof(serveraddress));
     if (bind_status == -1) {
         cout << "Socket binding failed.!" << endl;
         return;
     }
 
-    // Начинаем слушать
+    // ГЌГ Г·ГЁГ­Г ГҐГ¬ Г±Г«ГіГёГ ГІГј
     connection_status = listen(sockert_file_descriptor, 5);
     if (connection_status == -1) {
         cout << "Socket is unable to listen for new connections.!" << endl;
@@ -204,7 +204,7 @@ void Chat::sendMess(string curName, std::string* sqlConDate) // Отправить сообще
         return;
     }
 
-    // Установление связи
+    // Г“Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГҐ Г±ГўГїГ§ГЁ
     while (true) {
         bzero(message, MESSAGE_LENGTH);
         read(connection, message, sizeof(message));
@@ -214,32 +214,32 @@ void Chat::sendMess(string curName, std::string* sqlConDate) // Отправить сообще
             break;
         }
 
-        // Если сообщение начинается с "register", обрабатываем регистрацию
+        // Г…Г±Г«ГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г­Г Г·ГЁГ­Г ГҐГІГ±Гї Г± "register", Г®ГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГ¬ Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГѕ
         if (strncmp(message, "register", 8) == 0) {
-            string userData(message + 9); // Получаем данные пользователя после "register "
+            string userData(message + 9); // ГЏГ®Г«ГіГ·Г ГҐГ¬ Г¤Г Г­Г­Г»ГҐ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЇГ®Г±Г«ГҐ "register "
             size_t pos = userData.find(',');
             string curName = userData.substr(0, pos);
             userData.erase(0, pos + 1);
             pos = userData.find(',');
             string curSername = userData.substr(0, pos);
             userData.erase(0, pos + 1);
-            string curEmail = userData; // Остальные данные - это email
+            string curEmail = userData; // ГЋГ±ГІГ Г«ГјГ­Г»ГҐ Г¤Г Г­Г­Г»ГҐ - ГЅГІГ® email
 
-            // Вставка данных в таблицу Customers
-            int hash = (curName.length() % 50) + (curName.length() % 49); // Простой хэш
+            // Г‚Г±ГІГ ГўГЄГ  Г¤Г Г­Г­Г»Гµ Гў ГІГ ГЎГ«ГЁГ¶Гі Customers
+            int hash = (curName.length() % 50) + (curName.length() % 49); // ГЏГ°Г®Г±ГІГ®Г© ГµГЅГё
             string query = "INSERT INTO Customers (name, sername, email, hash) VALUES ('" + curName + "', '" + curSername + "', '" + curEmail + "', '" + to_string(hash) + "');";
             createQuery(sqlConDate, query.c_str());
             cout << "User  registered: " << curName << endl;
-            continue; // Продолжаем цикл, чтобы ожидать следующее сообщение
+            continue; // ГЏГ°Г®Г¤Г®Г«Г¦Г ГҐГ¬ Г¶ГЁГЄГ«, Г·ГІГ®ГЎГ» Г®Г¦ГЁГ¤Г ГІГј Г±Г«ГҐГ¤ГіГѕГ№ГҐГҐ Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ
         }
 
         cout << "Message: " << message << endl;
 
-        // Запись сообщения в базу данных
+        // Г‡Г ГЇГЁГ±Гј Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Гў ГЎГ Г§Гі Г¤Г Г­Г­Г»Гµ
         string query = "INSERT INTO Messages (id_sender, id_receiver, text, mess_date, read_mess, sent_mess) VALUES (1, 2, '" + string(message) + "', NOW(), 0, 1);";
         createQuery(sqlConDate, query.c_str());
 
-        // Отправка ответа клиенту
+        // ГЋГІГЇГ°Г ГўГЄГ  Г®ГІГўГҐГІГ  ГЄГ«ГЁГҐГ­ГІГі
         bzero(message, MESSAGE_LENGTH);
         cout << "Enter the message: " << endl;
         cin.getline(message, MESSAGE_LENGTH - 37);
